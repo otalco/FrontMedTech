@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Atendimento</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <script src="../assets/js/nav.js"></script>
+    <div class="container">
+        <h1>Registro de Atendimento</h1>
+        <form id="atendimentoForm">
+            <div class="form-group">
+                <label for="paciente">Paciente</label>
+                <input type="text" id="paciente" name="paciente" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <input type="text" id="status" name="status" required>
+            </div>
+            <div class="form-group">
+                <label for="peso">Peso (kg)</label>
+                <input type="text" id="peso" name="peso" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label for="altura">Altura (cm)</label>
+                <input type="text" id="altura" name="altura" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label for="pressaoArterial">Pressão Arterial (mmHg)</label>
+                <input type="text" id="pressaoArterial" name="pressaoArterial" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label for="temperatura">Temperatura (°C)</label>
+                <input type="text" id="temperatura" name="temperatura" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label for="saturacao">Saturação (%)</label>
+                <input type="text" id="saturacao" name="saturacao" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label for="frequenciaCardiaca">Frequência Cardíaca (bpm)</label>
+                <input type="text" id="frequenciaCardiaca" name="frequenciaCardiaca" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label for="queixaPrincipal">Queixa Principal</label>
+                <textarea id="queixaPrincipal" name="queixaPrincipal" maxlength="255"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="dataAtendimento">Data de Atendimento</label>
+                <input type="date" id="dataAtendimento" name="dataAtendimento" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Registrar</button>
+            </div>
+        </form>
+    </div>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
