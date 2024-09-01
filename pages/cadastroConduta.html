@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Conduta</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <!-- Incluir a navbar -->
+    <div id="navbar-placeholder"></div>
+
+    <script>
+        // Carregar o conteúdo do nav.html no placeholder
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            });
+    </script>
+    <script src="../assets/js/nav.js"></script>
+    <div class="container">
+        <h1>Formulário de Conduta</h1>
+        <form id="condutaForm">
+            <div class="form-group">
+                <label for="prontuarioId">Prontuário ID:</label>
+                <input type="number" id="prontuarioId" name="prontuarioId" required>
+            </div>
+            <div class="form-group">
+                <label for="pacienteId">Paciente ID:</label>
+                <input type="number" id="pacienteId" name="pacienteId" required>
+            </div>
+            <div class="form-group">
+                <label for="medicacao">Medicação:</label>
+                <input type="text" id="medicacao" name="medicacao" required>
+            </div>
+            <div class="form-group">
+                <label for="posologia">Posologia:</label>
+                <input type="text" id="posologia" name="posologia" required>
+            </div>
+            <div class="form-group">
+                <label for="evolucao">Evolução:</label>
+                <textarea id="evolucao" name="evolucao" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="recomendacoes">Recomendações:</label>
+                <textarea id="recomendacoes" name="recomendacoes" required></textarea>  
+            </div>
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status" required>
+                    <option value="ativo">Ativo</option>
+                    <option value="inativo">Inativo</option>
+                </select>
+            </div>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

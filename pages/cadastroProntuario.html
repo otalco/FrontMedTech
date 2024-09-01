@@ -16,10 +16,6 @@
                 <input type="text" id="paciente" name="paciente" required>
             </div>
             <div class="form-group">
-                <label for="status">Status</label>
-                <input type="text" id="status" name="status" required>
-            </div>
-            <div class="form-group">
                 <label for="peso">Peso (kg)</label>
                 <input type="text" id="peso" name="peso" maxlength="10">
             </div>
@@ -51,6 +47,22 @@
                 <label for="dataAtendimento">Data de Atendimento</label>
                 <input type="date" id="dataAtendimento" name="dataAtendimento" required>
             </div>
+            <div class="form-group">
+                <label for="Urgência">Urgência:</label>
+                <select id="Urgência" name="Urgência" required>
+                    <option value="5">Não Urgente</option>
+                    <option value="4">Pouco Urgente</option>
+                    <option value="3">Urgente</option>
+                    <option value="2">Muito Urgente</option>
+                    <option value="1">Emergência</option>
+                </select>
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select id="status" name="status" required>
+                        <option value="1">Aberto</option>
+                        <option value="2">Em Andamento</option>
+                        <option value="3">Finalizado</option>
+                    </select>
             <div class="form-group">
                 <button type="submit">Registrar</button>
             </div>

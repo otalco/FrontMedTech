@@ -131,3 +131,44 @@ document.addEventListener('DOMContentLoaded', () => {
         loadPacientes();
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const prontuarioId = new URLSearchParams(window.location.search).get('id');
+    if (prontuarioId) {
+        fetchProntuario(prontuarioId);
+    }
+
+    const atualizarBtn = document.getElementById('atualizar-btn');
+    if (atualizarBtn) {
+        atualizarBtn.addEventListener('click', fetchProntuario);
+    }
+});
+
+function fetchProntuario() {
+    fetch(`http://localhost:5107/api/Prontuario/next`)
+        .then(response => response.json())
+        .then(data => {
+            displayProntuario(data);
+        })
+        .catch(error => {
+            console.error('Error fetching prontuario:', error);
+            alert('Ocorreu um erro ao buscar o prontuário.');
+        });
+}
+
+function displayProntuario(prontuario) {
+    const prontuarioDados = document.getElementById('prontuario-dados');
+    prontuarioDados.innerHTML = `
+        <p><strong>ID:</strong> ${prontuario.id}</p>    
+        <p><strong>Paciente ID:</strong> ${prontuario.pacienteId}</p>
+        <p><strong>Status:</strong> ${prontuario.status}</p>
+        <p><strong>Peso:</strong> ${prontuario.peso || 'N/A'}</p>
+        <p><strong>Altura:</strong> ${prontuario.altura || 'N/A'}</p>
+        <p><strong>Pressão Arterial:</strong> ${prontuario.pressaoArterial || 'N/A'}</p>
+        <p><strong>Temperatura:</strong> ${prontuario.temperatura || 'N/A'}</p>
+        <p><strong>Saturação:</strong> ${prontuario.saturacao || 'N/A'}</p>
+        <p><strong>Frequência Cardíaca:</strong> ${prontuario.frequenciaCardiaca || 'N/A'}</p>
+        <p><strong>Queixa Principal:</strong> ${prontuario.queixaPrincipal || 'N/A'}</p>
+        <p><strong>Data de Atendimento:</strong> ${new Date(prontuario.dataAtendimento).toLocaleString()}</p>
+    `;
+}
