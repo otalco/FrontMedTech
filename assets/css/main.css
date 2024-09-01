@@ -378,3 +378,12 @@ footer {
 .social-icon:hover {
     color: #4CAF50;
 }
+
+/* Estilização da imagem do banner */
+.banner-image {
+    width: 100%; /* Ajuste a largura conforme necessário, por exemplo, 100% para ocupar toda a largura do contêiner */
+    max-width: 800px; /* Defina um tamanho máximo para a imagem */
+    height: auto; /* Manter a proporção da imagem */
+    display: block;
+    margin: 20px auto; /* Centralizar a imagem horizontalmente */
+}
