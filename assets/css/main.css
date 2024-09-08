@@ -387,3 +387,15 @@ footer {
     display: block;
     margin: 20px auto; /* Centralizar a imagem horizontalmente */
 }
+
+.btn-excluir {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.btn-excluir:hover {
+    background-color: darkred;
+}

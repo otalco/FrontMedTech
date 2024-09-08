@@ -1,3 +1,4 @@
+</html>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -13,8 +14,26 @@
         <h1>Registro de Atendimento</h1>
         <form id="atendimentoForm">
             <div class="form-group">
-                <label for="paciente">Paciente</label>
-                <input type="text" id="paciente" name="paciente" required>
+                <label for="pacienteId">Paciente</label>
+                <input type="text" id="pacienteId" name="pacienteId" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status" required>
+                    <option value="1">Paciente aguardando atendimento</option>
+                    <option value="2">Paciente em atendimento</option>
+                    <option value="3">Paciente liberado</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="urgencia">Urgência</label>
+                <select id="urgencia" name="urgencia" required>
+                    <option value="5">Pulseira azul, atendimento em até 4 horas</option>
+                    <option value="4">Pulseira verde, atendimento em até 2 horas</option>
+                    <option value="3">Pulseira amarela, atendimento em até 1 hora</option>
+                    <option value="2">Pulseira laranja, atendimento em até 10 minutos</option>
+                    <option value="1">Pulseira vermelha, atendimento imediato</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="peso">Peso (kg)</label>
@@ -42,33 +61,53 @@
             </div>
             <div class="form-group">
                 <label for="queixaPrincipal">Queixa Principal</label>
-                <textarea id="queixaPrincipal" name="queixaPrincipal" maxlength="255"></textarea>
+                <textarea id="queixaPrincipal" name="queixaPrincipal" maxlength="500"></textarea>
             </div>
             <div class="form-group">
-                <label for="dataAtendimento">Data de Atendimento</label>
-                <input type="date" id="dataAtendimento" name="dataAtendimento" required>
-            </div>
-            <div class="form-group">
-                <label for="Urgência">Urgência:</label>
-                <select id="Urgência" name="Urgência" required>
-                    <option value="5">Não Urgente</option>
-                    <option value="4">Pouco Urgente</option>
-                    <option value="3">Urgente</option>
-                    <option value="2">Muito Urgente</option>
-                    <option value="1">Emergência</option>
-                </select>
-                <div class="form-group">
-                    <label for="status">Status:</label>
-                    <select id="status" name="status" required>
-                        <option value="1">Aberto</option>
-                        <option value="2">Em Andamento</option>
-                        <option value="3">Finalizado</option>
-                    </select>
-            <div class="form-group">
-                <button type="submit">Registrar</button>
+                <button type="submit">Registrar Atendimento</button>
             </div>
         </form>
     </div>
-    <script src="../assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var pacienteID = urlParams.get('pacienteID');
+            document.getElementById('pacienteId').value = pacienteID;
+        });
+
+        document.getElementById('atendimentoForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = {
+                pacienteId: document.getElementById('pacienteId').value,
+                status: document.getElementById('status').value,
+                urgencia: document.getElementById('urgencia').value,
+                peso: document.getElementById('peso').value,
+                altura: document.getElementById('altura').value,
+                pressaoArterial: document.getElementById('pressaoArterial').value,
+                temperatura: document.getElementById('temperatura').value,
+                saturacao: document.getElementById('saturacao').value,
+                frequenciaCardiaca: document.getElementById('frequenciaCardiaca').value,
+                queixaPrincipal: document.getElementById('queixaPrincipal').value,
+                dataAtendimento: new Date().toISOString()
+            };
+
+            fetch('http://localhost:5107/api/Prontuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Atendimento registrado com sucesso!');
+                    window.location.href = 'pacientes.html';
+                } else {
+                    alert('Erro ao registrar atendimento.');
+                }
+            })
+            .catch(error => console.error('Erro ao registrar atendimento:', error));
+        });
+    </script>
 </body>
 </html>
