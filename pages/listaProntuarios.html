@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Prontuários</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" href="../assets/images/medtech-favicon.png" type="image/x-icon">
+</head>
+<body>
+    <!-- Incluir a navbar -->
+    <div id="navbar-placeholder"></div>
+
+    <script>
+        // Carregar o conteúdo do nav.html no placeholder
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            });
+    </script>
+    <script src="../assets/js/nav.js"></script>
+    <div class="container">
+        <h1>Lista de Prontuários</h1>
+        <button id="novoProntuarioBtn">Cadastrar Novo Prontuário</button>
+        <table id="prontuariosTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Urgência</th>
+                    <th>Data de Atendimento</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- As informações dos prontuários serão carregadas aqui -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        // Função para carregar a lista de prontuários do paciente
+        function loadProntuarios() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var pacienteID = urlParams.get('pacienteID');
+
+            fetch(`http://localhost:5107/api/prontuario/paciente/${pacienteID}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayProntuarios(data);
+                })
+                .catch(error => console.error('Error fetching prontuarios:', error));
+        }
+
+        // Função para exibir a lista de prontuários
+        function displayProntuarios(prontuarios) {
+            const prontuariosTableBody = document.querySelector('#prontuariosTable tbody');
+            prontuariosTableBody.innerHTML = '';
+
+            prontuarios.forEach(prontuario => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${prontuario.id}</td>
+                    <td>${getStatusDescription(prontuario.status)}</td>
+                    <td>${getUrgenciaDescription(prontuario.urgencia)}</td>
+                    <td>${new Date(prontuario.dataAtendimento).toLocaleString()}</td>
+                    <td>
+                        <button onclick="viewProntuario('${prontuario.id}')">Ver</button>
+                        <button class="btn-excluir" onclick="deleteProntuario('${prontuario.id}')">Excluir</button>
+                    </td>
+                `;
+
+                prontuariosTableBody.appendChild(row);
+            });
+        }
+
+        // Função para obter a descrição do status
+        function getStatusDescription(status) {
+            switch (status) {
+                case 1:
+                    return 'Aguardando Atendimento';
+                case 2:
+                    return 'Em Atendimento';
+                case 3:
+                    return 'Liberado';
+                default:
+                    return 'Desconhecido';
+            }
+        }
+
+        // Função para obter a descrição da urgência
+        function getUrgenciaDescription(urgencia) {
+            switch (urgencia) {
+                case 1:
+                    return 'Emergência';
+                case 2:
+                    return 'Muito Urgente';
+                case 3:
+                    return 'Urgente';
+                case 4:
+                    return 'Pouco Urgente';
+                case 5:
+                    return 'Não Urgente';
+                default:
+                    return 'Desconhecido';
+            }
+        }
+
+        // Função para redirecionar para a página de visualização de prontuário
+        function viewProntuario(prontuarioID) {
+            window.location.href = `verProntuario.html?prontuarioID=${prontuarioID}`;
+        }
+
+        // Função para excluir um prontuário
+        function deleteProntuario(prontuarioID) {
+            if (confirm('Tem certeza que deseja excluir este prontuário?')) {
+                fetch(`http://localhost:5107/api/prontuario/${prontuarioID}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Prontuário excluído com sucesso!');
+                        loadProntuarios(); // Recarregar a lista de prontuários
+                    } else {
+                        alert('Erro ao excluir prontuário.');
+                    }
+                })
+                .catch(error => console.error('Erro ao excluir prontuário:', error));
+            }
+        }
+
+        // Função para redirecionar para a página de cadastro de prontuário
+        document.getElementById('novoProntuarioBtn').addEventListener('click', function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var pacienteID = urlParams.get('pacienteID');
+            window.location.href = `cadastroProntuario.html?pacienteID=${pacienteID}`;
+        });
+
+        // Chamar a função para carregar a lista de prontuários quando a página for carregada
+        document.addEventListener('DOMContentLoaded', loadProntuarios);
+    </script>
+</body>
+</html>

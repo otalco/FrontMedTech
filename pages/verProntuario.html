@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Prontuário</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" href="../assets/images/medtech-favicon.png" type="image/x-icon">
+</head>
+<body>
+    <!-- Incluir a navbar -->
+    <div id="navbar-placeholder"></div>
+
+    <script>
+        // Carregar o conteúdo do nav.html no placeholder
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            });
+    </script>
+    <script src="../assets/js/nav.js"></script>
+    <div class="container">
+        <h1>Ver Prontuário</h1>
+        <form id="prontuarioForm">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="text" id="id" name="id" readonly disabled>
+            </div>
+            <div class="form-group">
+                <label for="pacienteId">Paciente ID</label>
+                <input type="text" id="pacienteId" name="pacienteId" readonly disabled>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <input type="text" id="status" name="status" readonly disabled>
+            </div>
+            <div class="form-group">
+                <label for="urgencia">Urgência</label>
+                <input type="text" id="urgencia" name="urgencia" readonly disabled>
+            </div>
+            <div class="form-group">
+                <label for="peso">Peso (kg)</label>
+                <input type="text" id="peso" name="peso" readonly disabled>
+            </div>
+            <div class="form-group">
+                <label for="altura">Altura (cm)</label>
+                <input type="text" id="altura" name="altura" readonly disabled>
+            </div>
+            <div class="form-group">
+                <label for="pressaoArterial">Pressão Arterial (mmHg)</label>
+                <input type="text" id="pressaoArterial" name="pressaoArterial" readonly disabled>
+            </div>
+            <div class="form-group">
+                <label for="temperatura">Temperatura (°C)</label>
+                <input type="text" id="temperatura" name="temperatura" readonly disabled>
+            </div>
+            <div class="form-group">
+                <label for="saturacao">Saturação (%)</label>
+                <input type="text" id="saturacao" name="saturacao" readonly disabled>
+            </div>
+            <div class="form-group">
+                <label for="frequenciaCardiaca">Frequência Cardíaca (bpm)</label>
+                <input type="text" id="frequenciaCardiaca" name="frequenciaCardiaca" readonly disabled>
+            </div>
+            <div class="form-group">
+                <label for="queixaPrincipal">Queixa Principal</label>
+                <textarea id="queixaPrincipal" name="queixaPrincipal" readonly disabled></textarea>
+            </div>
+            <div class="form-group">
+                <label for="dataAtendimento">Data de Atendimento</label>
+                <input type="text" id="dataAtendimento" name="dataAtendimento" readonly disabled>
+            </div>
+            <div class="form-group">
+                <button type="button" id="novaCondutaBtn">Criar Conduta</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var prontuarioID = urlParams.get('prontuarioID');
+
+            fetch(`http://localhost:5107/api/prontuario/${prontuarioID}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('id').value = data.id;
+                    document.getElementById('pacienteId').value = data.pacienteId;
+                    document.getElementById('status').value = getStatusDescription(data.status);
+                    document.getElementById('urgencia').value = getUrgenciaDescription(data.urgencia);
+                    document.getElementById('peso').value = data.peso;
+                    document.getElementById('altura').value = data.altura;
+                    document.getElementById('pressaoArterial').value = data.pressaoArterial;
+                    document.getElementById('temperatura').value = data.temperatura;
+                    document.getElementById('saturacao').value = data.saturacao;
+                    document.getElementById('frequenciaCardiaca').value = data.frequenciaCardiaca;
+                    document.getElementById('queixaPrincipal').value = data.queixaPrincipal;
+                    document.getElementById('dataAtendimento').value = new Date(data.dataAtendimento).toLocaleString();
+
+                    document.getElementById('novaCondutaBtn').addEventListener('click', function() {
+                        window.location.href = `cadastroConduta.html?prontuarioID=${data.id}&pacienteID=${data.pacienteId}`;
+                    });
+                })
+                .catch(error => console.error('Error fetching prontuario:', error));
+        });
+
+        // Função para obter a descrição do status
+        function getStatusDescription(status) {
+            switch (status) {
+                case 1:
+                    return 'Aguardando Atendimento';
+                case 2:
+                    return 'Em Atendimento';
+                case 3:
+                    return 'Liberado';
+                default:
+                    return 'Desconhecido';
+            }
+        }
+
+        // Função para obter a descrição da urgência
+        function getUrgenciaDescription(urgencia) {
+            switch (urgencia) {
+                case 1:
+                    return 'Emergência';
+                case 2:
+                    return 'Muito Urgente';
+                case 3:
+                    return 'Urgente';
+                case 4:
+                    return 'Pouco Urgente';
+                case 5:
+                    return 'Não Urgente';
+                default:
+                    return 'Desconhecido';
+            }
+        }
+    </script>
+</body>
+</html>
