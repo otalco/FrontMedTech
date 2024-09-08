@@ -8,17 +8,6 @@
     <link rel="icon" href="../assets/images/medtech-favicon.png" type="image/x-icon">
 </head>
 <body>
-    <!-- Incluir a navbar -->
-    <div id="navbar-placeholder"></div>
-
-    <script>
-        // Carregar o conteúdo do nav.html no placeholder
-        fetch('nav.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('navbar-placeholder').innerHTML = data;
-            });
-    </script>
     <script src="../assets/js/nav.js"></script>
     <div class="container">
         <h1>Lista de Pacientes</h1>
@@ -44,28 +33,40 @@
             fetch('http://localhost:5107/api/Paciente')
                 .then(response => response.json())
                 .then(data => {
-                    const pacientesTableBody = document.querySelector('#pacientesTable tbody');
-                    pacientesTableBody.innerHTML = '';
-
-                    data.forEach(paciente => {
-                        const row = document.createElement('tr');
-
-                        row.innerHTML = `
-                            <td>${paciente.nome}</td>   
-                            <td>${paciente.cpf}</td>
-                            <td>${paciente.dataNascimento}</td>
-                            <td>
-                                <button onclick="viewProntuario('${paciente.id}')">Ver Prontuário</button>
-                                <button onclick="editPaciente('${paciente.id}')">Editar</button>
-                                <button class="btn-excluir" onclick="deletePaciente('${paciente.id}')">Excluir</button>
-                                <button onclick="registerProntuario('${paciente.id}')">Registrar Prontuário</button>
-                            </td>
-                        `;
-
-                        pacientesTableBody.appendChild(row);
-                    });
+                    displayPacientes(data);
                 })
                 .catch(error => console.error('Error fetching pacientes:', error));
+        }
+
+        // Função para exibir a lista de pacientes
+        function displayPacientes(pacientes) {
+            const pacientesTableBody = document.querySelector('#pacientesTable tbody');
+            pacientesTableBody.innerHTML = '';
+
+            pacientes.forEach(paciente => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${paciente.nome}</td>
+                    <td>${paciente.cpf}</td>
+                    <td>${formatDate(paciente.dataNascimento)}</td>
+                    <td>
+                        <button onclick="viewProntuarios('${paciente.id}')">Ver Prontuários</button>
+                        <button onclick="editPaciente('${paciente.id}')">Editar</button>
+                        <button class="btn-excluir" onclick="deletePaciente('${paciente.id}')">Excluir</button>
+                        <button onclick="registerProntuario('${paciente.id}')">Registrar Prontuário</button>
+                        <button onclick="registerConduta('${paciente.id}')">Registrar Conduta</button>
+                    </td>
+                `;
+
+                pacientesTableBody.appendChild(row);
+            });
+        }
+
+        // Função para formatar a data de nascimento
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('pt-BR', options);
         }
 
         // Função para redirecionar para a página de edição de paciente
@@ -101,10 +102,15 @@
             window.location.href = `cadastroConduta.html?pacienteID=${pacienteID}`;
         }
 
-        // Função para redirecionar para a página de visualização de prontuários
-        function viewProntuario(pacienteID) {
+        // Função para redirecionar para a página de lista de prontuários
+        function viewProntuarios(pacienteID) {
             window.location.href = `listaProntuarios.html?pacienteID=${pacienteID}`;
         }
+
+        // Função para redirecionar para a página de cadastro de paciente
+        document.getElementById('novoPacienteBtn').addEventListener('click', function() {
+            window.location.href = 'cadastroPaciente.html';
+        });
 
         // Chamar a função para carregar a lista de pacientes quando a página for carregada
         document.addEventListener('DOMContentLoaded', loadPacientes);

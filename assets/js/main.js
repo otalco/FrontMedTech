@@ -107,9 +107,10 @@ function loadPacientes() {
         .catch(error => console.error('Error fetching pacientes:', error));
 }
 
+
 // Função para ver o prontuário do paciente
 function viewProntuario(pacienteId) {
-    window.location.href = `view.html?id=${pacienteId}`;
+    window.location.href = `verProntuario.html?id=${pacienteId}`;
 }
 
 // Função para editar o paciente
@@ -172,3 +173,4 @@ function displayProntuario(prontuario) {
         <p><strong>Data de Atendimento:</strong> ${new Date(prontuario.dataAtendimento).toLocaleString()}</p>
     `;
 }
+

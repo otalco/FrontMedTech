@@ -8,101 +8,62 @@
     <link rel="icon" href="../assets/images/medtech-favicon.png" type="image/x-icon">
 </head>
 <body>
-    <!-- Incluir a navbar -->
-    <div id="navbar-placeholder"></div>
-
-    <script>
-        // Carregar o conteúdo do nav.html no placeholder
-        fetch('nav.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('navbar-placeholder').innerHTML = data;
-            });
-    </script>
     <script src="../assets/js/nav.js"></script>
     <div class="container">
-        <h1>Ver Prontuário</h1>
-        <form id="prontuarioForm">
-            <div class="form-group">
-                <label for="id">ID</label>
-                <input type="text" id="id" name="id" readonly disabled>
-            </div>
-            <div class="form-group">
-                <label for="pacienteId">Paciente ID</label>
-                <input type="text" id="pacienteId" name="pacienteId" readonly disabled>
-            </div>
-            <div class="form-group">
-                <label for="status">Status</label>
-                <input type="text" id="status" name="status" readonly disabled>
-            </div>
-            <div class="form-group">
-                <label for="urgencia">Urgência</label>
-                <input type="text" id="urgencia" name="urgencia" readonly disabled>
-            </div>
-            <div class="form-group">
-                <label for="peso">Peso (kg)</label>
-                <input type="text" id="peso" name="peso" readonly disabled>
-            </div>
-            <div class="form-group">
-                <label for="altura">Altura (cm)</label>
-                <input type="text" id="altura" name="altura" readonly disabled>
-            </div>
-            <div class="form-group">
-                <label for="pressaoArterial">Pressão Arterial (mmHg)</label>
-                <input type="text" id="pressaoArterial" name="pressaoArterial" readonly disabled>
-            </div>
-            <div class="form-group">
-                <label for="temperatura">Temperatura (°C)</label>
-                <input type="text" id="temperatura" name="temperatura" readonly disabled>
-            </div>
-            <div class="form-group">
-                <label for="saturacao">Saturação (%)</label>
-                <input type="text" id="saturacao" name="saturacao" readonly disabled>
-            </div>
-            <div class="form-group">
-                <label for="frequenciaCardiaca">Frequência Cardíaca (bpm)</label>
-                <input type="text" id="frequenciaCardiaca" name="frequenciaCardiaca" readonly disabled>
-            </div>
-            <div class="form-group">
-                <label for="queixaPrincipal">Queixa Principal</label>
-                <textarea id="queixaPrincipal" name="queixaPrincipal" readonly disabled></textarea>
-            </div>
-            <div class="form-group">
-                <label for="dataAtendimento">Data de Atendimento</label>
-                <input type="text" id="dataAtendimento" name="dataAtendimento" readonly disabled>
-            </div>
-            <div class="form-group">
-                <button type="button" id="novaCondutaBtn">Criar Conduta</button>
-            </div>
-        </form>
+        <h1>Prontuário</h1>
+        <div id="prontuario-dados">
+            <!-- Os dados do prontuário serão exibidos aqui -->
+        </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var urlParams = new URLSearchParams(window.location.search);
-            var prontuarioID = urlParams.get('prontuarioID');
 
-            fetch(`http://localhost:5107/api/prontuario/${prontuarioID}`)
+    <script>
+        // Função para obter o ID do prontuário da URL
+        function getProntuarioIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('prontuarioID');
+        }
+
+        // Função para buscar e exibir os dados do prontuário
+        function fetchProntuario() {
+            const prontuarioId = getProntuarioIdFromUrl();
+            if (!prontuarioId) {
+                document.getElementById('prontuario-dados').innerHTML = '<p><strong>Erro:</strong> ID do prontuário não encontrado na URL.</p>';
+                return;
+            }
+
+            fetch(`http://localhost:5107/api/Prontuario/${prontuarioId}`)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('id').value = data.id;
-                    document.getElementById('pacienteId').value = data.pacienteId;
-                    document.getElementById('status').value = getStatusDescription(data.status);
-                    document.getElementById('urgencia').value = getUrgenciaDescription(data.urgencia);
-                    document.getElementById('peso').value = data.peso;
-                    document.getElementById('altura').value = data.altura;
-                    document.getElementById('pressaoArterial').value = data.pressaoArterial;
-                    document.getElementById('temperatura').value = data.temperatura;
-                    document.getElementById('saturacao').value = data.saturacao;
-                    document.getElementById('frequenciaCardiaca').value = data.frequenciaCardiaca;
-                    document.getElementById('queixaPrincipal').value = data.queixaPrincipal;
-                    document.getElementById('dataAtendimento').value = new Date(data.dataAtendimento).toLocaleString();
-
-                    document.getElementById('novaCondutaBtn').addEventListener('click', function() {
-                        window.location.href = `cadastroConduta.html?prontuarioID=${data.id}&pacienteID=${data.pacienteId}`;
-                    });
+                    const prontuarioDados = document.getElementById('prontuario-dados');
+                    if (!data || !data.id) {
+                        prontuarioDados.innerHTML = '<p><strong>Aviso:</strong> Prontuário não encontrado.</p>';
+                    } else {
+                        prontuarioDados.innerHTML = `
+                            <p><strong>ID do Paciente:</strong> ${data.pacienteId || 'ID não disponível'}</p>
+                            <p><strong>Peso:</strong> ${data.peso || 'Peso não disponível'}</p>
+                            <p><strong>Altura:</strong> ${data.altura || 'Altura não disponível'}</p>
+                            <p><strong>Pressão Arterial:</strong> ${data.pressaoArterial || 'Pressão Arterial não disponível'}</p>
+                            <p><strong>Temperatura:</strong> ${data.temperatura || 'Temperatura não disponível'}</p>
+                            <p><strong>Saturação:</strong> ${data.saturacao || 'Saturação não disponível'}</p>
+                            <p><strong>Frequência Cardíaca:</strong> ${data.frequenciaCardiaca || 'Frequência Cardíaca não disponível'}</p>
+                            <p><strong>Queixa Principal:</strong> ${data.queixaPrincipal || 'Queixa Principal não disponível'}</p>
+                            <p><strong>Data de Atendimento:</strong> ${data.dataAtendimento ? formatDate(data.dataAtendimento) : 'Data não disponível'}</p>
+                            <p><strong>Status:</strong> ${data.status !== undefined ? getStatusDescription(data.status) : 'Status não disponível'}</p>
+                            <p><strong>Urgência:</strong> ${data.urgencia !== undefined ? getUrgenciaDescription(data.urgencia) : 'Urgência não disponível'}</p>
+                        `;
+                    }
                 })
-                .catch(error => console.error('Error fetching prontuario:', error));
-        });
+                .catch(error => {
+                    console.error('Erro ao buscar prontuário:', error);
+                    document.getElementById('prontuario-dados').innerHTML = '<p><strong>Erro:</strong> Não foi possível buscar o prontuário.</p>';
+                });
+        }
+
+        // Função para formatar a data de atendimento
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('pt-BR', options);
+        }
 
         // Função para obter a descrição do status
         function getStatusDescription(status) {
@@ -135,6 +96,9 @@
                     return 'Desconhecido';
             }
         }
+
+        // Buscar os dados do prontuário ao carregar a página
+        document.addEventListener('DOMContentLoaded', fetchProntuario);
     </script>
 </body>
 </html>

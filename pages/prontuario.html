@@ -15,17 +15,6 @@
     </style>
 </head>
 <body>
-    <!-- Incluir a navbar -->
-    <div id="navbar-placeholder"></div>
-
-    <script>
-        // Carregar o conteúdo do nav.html no placeholder
-        fetch('nav.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('navbar-placeholder').innerHTML = data;
-            });
-    </script>
     <script src="../assets/js/nav.js"></script>
     <div class="container">
         <h1>Prontuário</h1>
@@ -33,6 +22,7 @@
             <!-- Os dados do prontuário serão exibidos aqui -->
         </div>
         <button id="atualizar-btn" type="button" class="btn-atualizar">Atualizar</button>
+        <button id="emAtendimento-btn" type="button" class="btn-em-atendimento">Em Atendimento</button>
     </div>
 
     <script>
@@ -42,34 +32,53 @@
                 .then(response => response.json())
                 .then(data => {
                     const prontuarioDados = document.getElementById('prontuario-dados');
-                    prontuarioDados.className = `urgencia-${data.urgencia}`;
-                    prontuarioDados.innerHTML = `
-                        <p><strong>Nome do Paciente:</strong> ${data.nomePaciente}</p>
-                    `;
+                    if (!data || !data.id) {
+                        prontuarioDados.innerHTML = '<p><strong>Aviso:</strong> Não há próximo prontuário a ser chamado.</p>';
+                        prontuarioDados.className = '';
+                        document.getElementById('emAtendimento-btn').disabled = true;
+                    } else {
+                        prontuarioDados.className = `urgencia-${data.urgencia}`;
+                        prontuarioDados.innerHTML = `
+                            <p><strong>Nome do Paciente:</strong> ${data.nomePaciente || 'Nome não disponível'}</p>
+                        `;
+                        // Armazenar o ID do prontuário para uso posterior
+                        document.getElementById('emAtendimento-btn').dataset.prontuarioId = data.id;
+                        document.getElementById('emAtendimento-btn').disabled = false;
+                    }
                 })
-                .catch(error => console.error('Erro ao buscar prontuário:', error));
+                .catch(error => {
+                    console.error('Erro ao buscar prontuário:', error);
+                    document.getElementById('prontuario-dados').innerHTML = '<p><strong>Erro:</strong> Não foi possível buscar o prontuário.</p>';
+                });
         }
 
-        // Função para obter a descrição da urgência
-        function getUrgenciaDescription(urgencia) {
-            switch (urgencia) {
-                case 1:
-                    return 'Emergência';
-                case 2:
-                    return 'Muito Urgente';
-                case 3:
-                    return 'Urgente';
-                case 4:
-                    return 'Pouco Urgente';
-                case 5:
-                    return 'Não Urgente';
-                default:
-                    return 'Desconhecido';
-            }
+        // Função para alterar o status do prontuário para "Em Atendimento"
+        function alterarStatusParaEmAtendimento() {
+            const prontuarioId = document.getElementById('emAtendimento-btn').dataset.prontuarioId;
+            fetch(`http://localhost:5107/api/Prontuario/status/${prontuarioId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(2) // 2 representa "Em Atendimento"
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Status do prontuário atualizado para "Em Atendimento"');
+                    // Atualizar a exibição do prontuário
+                    fetchProntuario();
+                } else {
+                    alert('Erro ao atualizar status do prontuário.');
+                }
+            })
+            .catch(error => console.error('Erro ao atualizar status do prontuário:', error));
         }
 
         // Event listener para o botão de atualizar
         document.getElementById('atualizar-btn').addEventListener('click', fetchProntuario);
+
+        // Event listener para o botão de alterar status para "Em Atendimento"
+        document.getElementById('emAtendimento-btn').addEventListener('click', alterarStatusParaEmAtendimento);
 
         // Buscar os dados do prontuário ao carregar a página
         document.addEventListener('DOMContentLoaded', fetchProntuario);
