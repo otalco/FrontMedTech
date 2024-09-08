@@ -114,7 +114,7 @@ function viewProntuario(pacienteId) {
 
 // Função para editar o paciente
 function editPaciente(pacienteId) {
-    window.location.href = `register.html?id=${pacienteId}`;
+    window.location.href = `editarPaciente.html?id=${pacienteId}`;
 }
 
 // Adicionar event listener para o botão de cadastrar novo paciente
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const novoPacienteBtn = document.getElementById('novoPacienteBtn');
     if (novoPacienteBtn) {
         novoPacienteBtn.addEventListener('click', () => {
-            window.location.href = 'register.html';
+            window.location.href = 'cadastropaciente.html';
         });
     }
 
