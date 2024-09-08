@@ -59,7 +59,6 @@
                                 <button onclick="editPaciente('${paciente.id}')">Editar</button>
                                 <button class="btn-excluir" onclick="deletePaciente('${paciente.id}')">Excluir</button>
                                 <button onclick="registerProntuario('${paciente.id}')">Registrar Prontuário</button>
-                                <button onclick="registerConduta('${paciente.id}')">Registrar Conduta</button>
                             </td>
                         `;
 
@@ -100,6 +99,11 @@
         // Função para redirecionar para a página de registro de conduta
         function registerConduta(pacienteID) {
             window.location.href = `cadastroConduta.html?pacienteID=${pacienteID}`;
+        }
+
+        // Função para redirecionar para a página de visualização de prontuários
+        function viewProntuario(pacienteID) {
+            window.location.href = `listaProntuarios.html?pacienteID=${pacienteID}`;
         }
 
         // Chamar a função para carregar a lista de pacientes quando a página for carregada

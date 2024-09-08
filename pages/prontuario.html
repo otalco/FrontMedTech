@@ -6,28 +6,73 @@
     <title>Prontuário</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" href="../assets/images/medtech-favicon.png" type="image/x-icon">
+    <style>
+        .urgencia-1 { background-color: red; }
+        .urgencia-2 { background-color: orange; }
+        .urgencia-3 { background-color: yellow; }
+        .urgencia-4 { background-color: green; }
+        .urgencia-5 { background-color: blue; }
+    </style>
 </head>
 <body>
     <!-- Incluir a navbar -->
-        <div id="navbar-placeholder"></div>
+    <div id="navbar-placeholder"></div>
 
-        <script>
-            // Carregar o conteúdo do nav.html no placeholder
-            fetch('nav.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('navbar-placeholder').innerHTML = data;
-                });
-        </script>
+    <script>
+        // Carregar o conteúdo do nav.html no placeholder
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            });
+    </script>
     <script src="../assets/js/nav.js"></script>
     <div class="container">
         <h1>Prontuário</h1>
         <div id="prontuario-dados">
             <!-- Os dados do prontuário serão exibidos aqui -->
         </div>
-        <button id="atualizar-btn" type="submit" class="btn-atualizar">Atualizar</button>
+        <button id="atualizar-btn" type="button" class="btn-atualizar">Atualizar</button>
     </div>
 
-    <script src="main.js"></script>
+    <script>
+        // Função para buscar e exibir os dados do prontuário
+        function fetchProntuario() {
+            fetch('http://localhost:5107/api/Prontuario/next')
+                .then(response => response.json())
+                .then(data => {
+                    const prontuarioDados = document.getElementById('prontuario-dados');
+                    prontuarioDados.className = `urgencia-${data.urgencia}`;
+                    prontuarioDados.innerHTML = `
+                        <p><strong>Nome do Paciente:</strong> ${data.nomePaciente}</p>
+                    `;
+                })
+                .catch(error => console.error('Erro ao buscar prontuário:', error));
+        }
+
+        // Função para obter a descrição da urgência
+        function getUrgenciaDescription(urgencia) {
+            switch (urgencia) {
+                case 1:
+                    return 'Emergência';
+                case 2:
+                    return 'Muito Urgente';
+                case 3:
+                    return 'Urgente';
+                case 4:
+                    return 'Pouco Urgente';
+                case 5:
+                    return 'Não Urgente';
+                default:
+                    return 'Desconhecido';
+            }
+        }
+
+        // Event listener para o botão de atualizar
+        document.getElementById('atualizar-btn').addEventListener('click', fetchProntuario);
+
+        // Buscar os dados do prontuário ao carregar a página
+        document.addEventListener('DOMContentLoaded', fetchProntuario);
+    </script>
 </body>
 </html>

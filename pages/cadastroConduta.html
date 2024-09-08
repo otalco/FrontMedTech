@@ -1,54 +1,39 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Conduta</title>
+    <title>Cadastro de Conduta</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" href="../assets/images/medtech-favicon.png" type="image/x-icon">
 </head>
 <body>
-    <!-- Incluir a navbar -->
-    <div id="navbar-placeholder"></div>
-
-    <script>
-        // Carregar o conteúdo do nav.html no placeholder
-        fetch('nav.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('navbar-placeholder').innerHTML = data;
-            });
-    </script>
     <script src="../assets/js/nav.js"></script>
     <div class="container">
-        <h1>Formulário de Conduta</h1>
+        <h1>Cadastro de Conduta</h1>
         <form id="condutaForm">
             <div class="form-group">
-                <label for="prontuarioId">Prontuário ID:</label>
-                <input type="number" id="prontuarioId" name="prontuarioId" required>
+                <label for="prontuarioId">Prontuário ID</label>
+                <input type="text" id="prontuarioId" name="prontuarioId" readonly>
             </div>
             <div class="form-group">
-                <label for="pacienteId">Paciente ID:</label>
-                <input type="number" id="pacienteId" name="pacienteId" required>
-            </div>
-            <div class="form-group">
-                <label for="medicacao">Medicação:</label>
+                <label for="medicacao">Medicação</label>
                 <input type="text" id="medicacao" name="medicacao" required>
             </div>
             <div class="form-group">
-                <label for="posologia">Posologia:</label>
+                <label for="posologia">Posologia</label>
                 <input type="text" id="posologia" name="posologia" required>
             </div>
             <div class="form-group">
-                <label for="evolucao">Evolução:</label>
+                <label for="evolucao">Evolução</label>
                 <textarea id="evolucao" name="evolucao" required></textarea>
             </div>
             <div class="form-group">
-                <label for="recomendacoes">Recomendações:</label>
+                <label for="recomendacoes">Recomendações</label>
                 <textarea id="recomendacoes" name="recomendacoes" required></textarea>  
             </div>
             <div class="form-group">
-                <label for="status">Status:</label>
+                <label for="status">Status</label>
                 <select id="status" name="status" required>
                     <option value="ativo">Ativo</option>
                     <option value="inativo">Inativo</option>
@@ -57,6 +42,51 @@
             <button type="submit">Enviar</button>
         </form>
     </div>
-    <script src="../assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var prontuarioID = urlParams.get('prontuarioID');
+
+            // Preencher o campo prontuarioId com o ID do prontuário
+            document.getElementById('prontuarioId').value = prontuarioID;
+
+            // Carregar o ID do paciente a partir do prontuário
+            fetch(`http://localhost:5107/api/prontuario/${prontuarioID}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('pacienteId').value = data.pacienteId;
+                })
+                .catch(error => console.error('Erro ao buscar prontuário:', error));
+        });
+
+        document.getElementById('condutaForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = {
+                prontuarioId: parseInt(document.getElementById('prontuarioId').value),
+                medicacao: document.getElementById('medicacao').value,
+                posologia: document.getElementById('posologia').value,
+                evolucao: document.getElementById('evolucao').value,
+                recomendacoes: document.getElementById('recomendacoes').value,
+                status: document.getElementById('status').value
+            };
+
+            fetch('http://localhost:5107/api/Conduta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Conduta registrada com sucesso!');
+                    window.location.href = 'pacientes.html';
+                } else {
+                    alert('Erro ao registrar conduta.');
+                }
+            })
+            .catch(error => console.error('Erro ao registrar conduta:', error));
+        });
+    </script>
 </body>
 </html>
