@@ -28,7 +28,7 @@
     <script>
         // Função para buscar e exibir os dados do prontuário
         function fetchProntuario() {
-            fetch('http://localhost:5107/api/Prontuario/next')
+            fetch('http://172.19.0.2:5107/api/Prontuario/next')
                 .then(response => response.json())
                 .then(data => {
                     const prontuarioDados = document.getElementById('prontuario-dados');
@@ -55,7 +55,7 @@
         // Função para alterar o status do prontuário para "Em Atendimento"
         function alterarStatusParaEmAtendimento() {
             const prontuarioId = document.getElementById('emAtendimento-btn').dataset.prontuarioId;
-            fetch(`http://localhost:5107/api/Prontuario/status/${prontuarioId}`, {
+            fetch(`http://172.19.0.2:5107/api/Prontuario/status/${prontuarioId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'

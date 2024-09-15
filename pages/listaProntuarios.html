@@ -39,7 +39,7 @@
                 return;
             }
 
-            fetch(`http://localhost:5107/api/prontuario/paciente/${pacienteId}`)
+            fetch(`http://172.19.0.2:5107/api/prontuario/paciente/${pacienteId}`)
                 .then(response => response.json())
                 .then(data => {
                     displayProntuarios(data);

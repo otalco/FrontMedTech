@@ -69,7 +69,7 @@
             var edicaoForm = document.getElementById('edicaoForm');
 
             // Buscar dados do paciente e pré-preencher o formulário
-            fetch(`http://localhost:5107/api/Paciente/${pacienteID}`)
+            fetch(`http://172.19.0.2:5107/api/Paciente/${pacienteID}`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('nome').value = data.nome;
@@ -104,7 +104,7 @@
                     observacoes: document.getElementById('observacoes').value
                 };
 
-                fetch(`http://localhost:5107/api/Paciente/${pacienteID}`, {
+                fetch(`http://172.19.0.2:5107/api/Paciente/${pacienteID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'

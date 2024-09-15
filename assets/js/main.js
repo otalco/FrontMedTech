@@ -15,7 +15,7 @@ function handleCadastroFormSubmit(event) {
         observacoes: document.getElementById('observacoes').value
     };
 
-    fetch('http://localhost:5107/api/Paciente', {
+    fetch('http://172.19.0.2:5107/api/Paciente', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ function handleAtendimentoFormSubmit(event) {
         dataAtendimento: document.getElementById('dataAtendimento').value
     };
 
-    fetch('http://localhost:5107/api/Prontuario', {
+    fetch('http://172.19.0.2:5107/api/Prontuario', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 // Função para carregar a lista de pacientes
 function loadPacientes() {
-    fetch('http://localhost:5107/api/Paciente')
+    fetch('http://172.19.0.2:5107/api/Paciente')
         .then(response => response.json())
         .then(data => {
             const pacientesTableBody = document.querySelector('#pacientesTable tbody');
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function fetchProntuario() {
-    fetch(`http://localhost:5107/api/Prontuario/next`)
+    fetch(`http://172.19.0.2:5107/api/Prontuario/next`)
         .then(response => response.json())
         .then(data => {
             displayProntuario(data);

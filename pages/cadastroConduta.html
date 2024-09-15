@@ -51,7 +51,7 @@
             document.getElementById('prontuarioId').value = prontuarioID;
 
             // Carregar o ID do paciente a partir do prontuário
-            fetch(`http://localhost:5107/api/prontuario/${prontuarioID}`)
+            fetch(`http://172.19.0.2:5107/api/prontuario/${prontuarioID}`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('pacienteId').value = data.pacienteId;
@@ -70,7 +70,7 @@
                 status: document.getElementById('status').value
             };
 
-            fetch('http://localhost:5107/api/Conduta', {
+            fetch('http://172.19.0.2:5107/api/Conduta', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
