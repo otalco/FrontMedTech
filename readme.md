@@ -116,7 +116,7 @@ MedTech é uma aplicação web para gerenciamento de prontuários médicos. O pr
 ```javascript
 function fetchProntuario() {
     const prontuarioId = getProntuarioIdFromUrl();
-    fetch(`http://172.19.0.2:5107/api/Prontuario/${prontuarioId}`)
+    fetch(`http://168.75.108.156:5107/api/Prontuario/${prontuarioId}`)
         .then(response => response.json())
         .then(data => {
             const prontuarioDados = document.getElementById('prontuario-dados');
@@ -150,7 +150,7 @@ function fetchProntuario() {
 ```javascript
 function alterarStatusParaEmAtendimento() {
     const prontuarioId = document.getElementById('emAtendimento-btn').dataset.prontuarioId;
-    fetch(`http://172.19.0.2:5107/api/Prontuario/status/${prontuarioId}`, {
+    fetch(`http://168.75.108.156:5107/api/Prontuario/status/${prontuarioId}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'

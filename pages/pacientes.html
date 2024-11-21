@@ -30,7 +30,7 @@
     <script>
         // Função para carregar a lista de pacientes
         function loadPacientes() {
-            fetch('http://172.19.0.2:5107/api/Paciente')
+            fetch('http://168.75.108.156:5107/api/Paciente')
                 .then(response => response.json())
                 .then(data => {
                     displayPacientes(data);
@@ -77,7 +77,7 @@
         // Função para excluir um paciente
         function deletePaciente(pacienteID) {
             if (confirm('Tem certeza que deseja excluir este paciente?')) {
-                fetch(`http://172.19.0.2:5107/api/Paciente/${pacienteID}`, {
+                fetch(`http://168.75.108.156:5107/api/Paciente/${pacienteID}`, {
                     method: 'DELETE'
                 })
                 .then(response => {

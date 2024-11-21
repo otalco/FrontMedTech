@@ -31,7 +31,7 @@
                 return;
             }
 
-            fetch(`http://172.19.0.2:5107/api/Prontuario/${prontuarioId}`)
+            fetch(`http://168.75.108.156:5107/api/Prontuario/${prontuarioId}`)
                 .then(response => response.json())
                 .then(data => {
                     const prontuarioDados = document.getElementById('prontuario-dados');
